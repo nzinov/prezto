@@ -42,6 +42,10 @@ if [[ -S "$SSH_AUTH_SOCK" && "$SSH_AUTH_SOCK" != "$_ssh_agent_sock" ]]; then
   export SSH_AUTH_SOCK="$_ssh_agent_sock"
 fi
 
+if [[ -S "$SSH_CONNECTION" && -z "$SSH_AUTH_SOCK"]]; then
+  export SSH_AUTH_SOCK="$_ssh_agent_sock"
+fi
+  
 # Load identities.
 if ssh-add -l 2>&1 | grep -q 'The agent has no identities'; then
   zstyle -a ':prezto:module:ssh:load' identities '_ssh_identities'
