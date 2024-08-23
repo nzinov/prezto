@@ -42,7 +42,7 @@ if [[ -S "$SSH_AUTH_SOCK" && "$SSH_AUTH_SOCK" != "$_ssh_agent_sock" ]]; then
   export SSH_AUTH_SOCK="$_ssh_agent_sock"
 fi
 
-if [[ -S "$SSH_CONNECTION" && -z "$SSH_AUTH_SOCK"]]; then
+if [[ -S "$SSH_CONNECTION" && -z "$SSH_AUTH_SOCK" ]]; then
   export SSH_AUTH_SOCK="$_ssh_agent_sock"
 fi
   
