@@ -21,6 +21,7 @@ _ssh_agent_sock="${_ssh_agent_sock:-${XDG_CACHE_HOME:-$HOME/.cache}/prezto/ssh-a
 
 # Start ssh-agent if not started.
 if [[ ! -S "$SSH_AUTH_SOCK" ]]; then
+  echo "Starting agent"
   # Export environment variables.
   source "$_ssh_agent_env" 2> /dev/null
 
@@ -37,6 +38,7 @@ fi
 
 # Create a persistent SSH authentication socket.
 if [[ -S "$SSH_AUTH_SOCK" && "$SSH_AUTH_SOCK" != "$_ssh_agent_sock" ]]; then
+  echo "Populating agent sock"
   mkdir -p "$_ssh_agent_sock:h"
   ln -sf "$SSH_AUTH_SOCK" "$_ssh_agent_sock"
   export SSH_AUTH_SOCK="$_ssh_agent_sock"
@@ -55,6 +57,7 @@ if ssh-add -l 2>&1 | grep -q 'The agent has no identities'; then
   # associated with it but DISPLAY and SSH_ASKPASS are set, it will execute the
   # program specified by SSH_ASKPASS and open an X11 window to read the
   # passphrase.
+  echo "Loading identities"
   if [[ -n "$DISPLAY" && -x "$SSH_ASKPASS" ]]; then
     ssh-add ${_ssh_identities:+$_ssh_dir/${^~_ssh_identities[@]}} < /dev/null 2> /dev/null
   else
