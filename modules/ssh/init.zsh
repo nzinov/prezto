@@ -27,7 +27,7 @@ if [[ ! -S "$SSH_AUTH_SOCK" ]]; then
 
   # Start ssh-agent if not started.
   if ! ps -U "$LOGNAME" -o pid,ucomm | grep -q -- "${SSH_AGENT_PID:--1} ssh-agent"; then
-    if [[ -z "$SSH_TTY" ]]; then
+    if [[ -z "$SSH_CONNECTION" ]]; then
       mkdir -p "$_ssh_agent_env:h"
       # Check if SSH_TTY is not defined, which means that the user is not using an
       # interactive terminal, and thus we should start ssh-agent.
