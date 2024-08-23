@@ -20,18 +20,13 @@ _ssh_agent_env="${_ssh_agent_env:-${XDG_CACHE_HOME:-$HOME/.cache}/prezto/ssh-age
 _ssh_agent_sock="${_ssh_agent_sock:-${XDG_CACHE_HOME:-$HOME/.cache}/prezto/ssh-agent.sock}"
 
 # Start ssh-agent if not started.
-if [[ ! -S "$SSH_AUTH_SOCK" ]]; then
-  # Export environment variables.
+if [[ ! -S "$SSH_AUTH_SOCK" && -z "$SSH_CONNECTION" ]]; then
   source "$_ssh_agent_env" 2> /dev/null
 
   # Start ssh-agent if not started.
   if ! ps -U "$LOGNAME" -o pid,ucomm | grep -q -- "${SSH_AGENT_PID:--1} ssh-agent"; then
-    if [[ -z "$SSH_CONNECTION" ]]; then
       mkdir -p "$_ssh_agent_env:h"
-      # Check if SSH_TTY is not defined, which means that the user is not using an
-      # interactive terminal, and thus we should start ssh-agent.
-        eval "$(ssh-agent | sed '/^echo /d' | tee "$_ssh_agent_env")"
-    fi
+      eval "$(ssh-agent | sed '/^echo /d' | tee "$_ssh_agent_env")"
   fi
 fi
 
